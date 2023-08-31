@@ -57,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
         tv1.setText("Plant Eye");
         tv1.setTextColor('4');
         tv1.setTextSize(12);
+/*        tv1.setX(30);
+        tv1.setY(30);*/
 
 
     }
