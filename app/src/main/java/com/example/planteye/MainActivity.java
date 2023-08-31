@@ -18,12 +18,18 @@ import com.example.planteye.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 /////////
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
 //hi///
+
+    //Runs everytime activity is created(happens once)
+    //on start runs everytime you open the screen(IMPORTANT)
+    // treat activities as screens on the app
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +51,14 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        TextView tv1 = (TextView)findViewById(R.id.textView);
+
+        tv1.setText("Plant Eye");
+        tv1.setTextColor('4');
+        tv1.setTextSize(12);
+
+
     }
 
     @Override
