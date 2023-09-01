@@ -1,6 +1,8 @@
 package com.example.planteye;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.EditText;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -57,6 +59,32 @@ public class MainActivity extends AppCompatActivity {
 
 /*        tv1.setX(30);
         tv1.setY(30);*/
+
+
+    }
+
+    public void validateLogin(View v) {
+        EditText editTextUsername = findViewById(R.id.usernameEditText);
+        EditText editTextPassword = findViewById(R.id.passwordEditText);
+
+        String username = editTextUsername.getText().toString();
+        String password = editTextPassword.getText().toString();
+
+        if ("admin".equals(username) && "admin".equals(password)) {
+            // User is authenticated; navigate to home activity
+            Intent i = new Intent(this, home.class);
+            startActivity(i);
+        } else {
+            // Show a Snackbar message
+            Snackbar.make(v, "Invalid Username or Password", Snackbar.LENGTH_LONG)
+                    .setAnchorView(R.id.fab)
+                    .setAction("Action", null).show();
+        }
+    }
+
+    public void home(View v){
+
+        validateLogin(v);
 
 
     }
