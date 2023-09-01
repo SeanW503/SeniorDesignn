@@ -2,8 +2,50 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinatorLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".home">
 
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="405dp"
+        android:layout_height="146dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="55dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginBottom="74dp"
+        android:text="Take Photos"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:layout_width="139dp"
+        android:layout_height="144dp"
+        android:layout_marginStart="136dp"
+        android:layout_marginTop="49dp"
+        android:layout_marginEnd="136dp"
+        android:layout_marginBottom="58dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageButton4"
+        app:srcCompat="@drawable/settings" />
+
+    <ImageButton
+        android:id="@+id/imageButton4"
+        android:layout_width="220dp"
+        android:layout_height="181dp"
+        android:layout_marginStart="95dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="96dp"
+        android:layout_marginBottom="61dp"
+        app:layout_constraintBottom_toTopOf="@+id/imageButton3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button3"
+        app:srcCompat="@drawable/photoalbum" />
 </androidx.constraintlayout.widget.ConstraintLayout>
