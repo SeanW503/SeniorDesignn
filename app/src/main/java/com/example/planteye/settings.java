@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -42,6 +43,13 @@ public class settings extends AppCompatActivity {
                     Toast.makeText(settings.this, "Bluetooth is not supported on this device", Toast.LENGTH_SHORT).show();
                 } else {
                     // Start discovering nearby devices
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (checkSelfPermission(Manifest.permission.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION) != PackageManager.PERMISSION_GRANTED) {
+                            // Request the permission
+                            requestPermissions(new String[]{Manifest.permission.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION}, PERMISSION_REQUEST_CODE);
+                            return;
+                        }
+                    }
                     startDeviceDiscovery();
                 }
             }
@@ -49,6 +57,16 @@ public class settings extends AppCompatActivity {
     }
 
     private void startDeviceDiscovery() {
+        // Check if BLUETOOTH_SCAN permission is granted
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_SCAN)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Request BLUETOOTH_SCAN permission
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.BLUETOOTH_SCAN},
+                    BLUETOOTH_REQUEST_CODE);
+            return;
+        }
+
         // Register for broadcasts when a device is discovered
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         bluetoothReceiver = new BroadcastReceiver() {
@@ -58,16 +76,6 @@ public class settings extends AppCompatActivity {
                 if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                     BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                     // Check if the discovered device is your ESP32 device
-                    if (ActivityCompat.checkSelfPermission(settings.this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return;
-                    }
                     if (device.getName() != null && device.getName().equals("ProjectBox")) {
                         // Connect to the ESP32 device
                         connectToDevice(device);
