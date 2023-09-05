@@ -39,7 +39,9 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/photoSet"
-        app:srcCompat="@drawable/settings" />
+        app:srcCompat="@drawable/settings"
+        android:onClick="settings" />
+
 
     <ImageButton
         android:id="@+id/photoSet"

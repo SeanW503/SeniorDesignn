@@ -88,13 +88,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void photoBtn(View photo)
-    {
-        Intent p = new Intent(this, photoSet.class);
 
-        startActivity(p);
 
-    }
+
+
 
 
     @Override
