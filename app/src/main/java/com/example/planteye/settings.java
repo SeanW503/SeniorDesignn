@@ -91,7 +91,7 @@ public class settings extends AppCompatActivity {
         BluetoothSocket socket = null;
         try {
             // Create a BluetoothSocket for the specified device
-            socket = device.createRfcommSocketToServiceRecord(UUID.fromString("YOUR_UUID")); // Replace "YOUR_UUID" with the actual UUID
+            socket = device.createRfcommSocketToServiceRecord(UUID.fromString("4fafc201-1fb5-459e-8fcc-c5c9c331914b")); // Replace "YOUR_UUID" with the actual UUID
 
             // Connect to the device
             socket.connect();
