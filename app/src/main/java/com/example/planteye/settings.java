@@ -81,7 +81,40 @@ public class settings extends AppCompatActivity {
     }
 
     private void connectToDevice(BluetoothDevice device) {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.BLUETOOTH_CONNECT},
+                    BLUETOOTH_REQUEST_CODE);
+            return;
+        }
+        BluetoothSocket socket = null;
+        try {
+            // Create a BluetoothSocket for the specified device
+            socket = device.createRfcommSocketToServiceRecord(UUID.fromString("YOUR_UUID"));
 
+            // Connect to the device
+            socket.connect();
+
+            // Now you can use the socket for data transfer
+            // For example, you can get input and output streams from the socket:
+            // InputStream inputStream = socket.getInputStream();
+            // OutputStream outputStream = socket.getOutputStream();
+
+            // Handle data transfer here
+        } catch (IOException e) {
+            // Handle any exceptions that occur during connection
+            e.printStackTrace();
+        } finally {
+            try {
+                // Close the socket when done
+                if (socket != null) {
+                    socket.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
