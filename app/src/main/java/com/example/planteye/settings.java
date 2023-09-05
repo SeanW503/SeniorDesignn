@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -81,6 +82,8 @@ public class settings extends AppCompatActivity {
     }
 
     private void connectToDevice(BluetoothDevice device) {
+        Log.d("Bluetooth", "connectToDevice called");
+
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
@@ -90,12 +93,14 @@ public class settings extends AppCompatActivity {
         }
         BluetoothSocket socket = null;
         try {
+            Log.d("Bluetooth", "Attempting to connect");
             // Create a BluetoothSocket for the specified device
             socket = device.createRfcommSocketToServiceRecord(UUID.fromString("4fafc201-1fb5-459e-8fcc-c5c9c331914b")); // Replace "YOUR_UUID" with the actual UUID
 
             // Connect to the device
             socket.connect();
 
+            Log.d("Bluetooth", "Connection successful");
             // Connection was successful
             Toast.makeText(this, "Successfully connected to device", Toast.LENGTH_SHORT).show();
 
@@ -106,6 +111,7 @@ public class settings extends AppCompatActivity {
 
             // Handle data transfer here
         } catch (IOException e) {
+            Log.d("Bluetooth", "Connection failed");
             // Connection was unsuccessful
             Toast.makeText(this, "Failed to connect to device", Toast.LENGTH_SHORT).show();
 
