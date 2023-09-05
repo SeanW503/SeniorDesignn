@@ -53,7 +53,7 @@ public class settings extends AppCompatActivity {
                 if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                     BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                     // Check if the discovered device is your ESP32 device
-                    if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(settings.this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
                         // TODO: Consider calling
                         //    ActivityCompat#requestPermissions
                         // here to request the missing permissions, and then overriding
@@ -77,10 +77,35 @@ public class settings extends AppCompatActivity {
     }
 
     private void connectToDevice(BluetoothDevice device) {
-        // Implement Bluetooth connection logic here
-        // You'll need to create a BluetoothSocket and connect to the device
-        // For more details on connecting to a Bluetooth device, refer to Android documentation or relevant Bluetooth libraries.
+        BluetoothSocket socket = null;
+        try {
+            // Create a BluetoothSocket for the specified device
+            socket = device.createRfcommSocketToServiceRecord(UUID.fromString("YOUR_UUID"));
+
+            // Connect to the device
+            socket.connect();
+
+            // Now you can use the socket for data transfer
+            // For example, you can get input and output streams from the socket:
+            // InputStream inputStream = socket.getInputStream();
+            // OutputStream outputStream = socket.getOutputStream();
+
+            // Handle data transfer here
+        } catch (IOException e) {
+            // Handle any exceptions that occur during connection
+            e.printStackTrace();
+        } finally {
+            try {
+                // Close the socket when done
+                if (socket != null) {
+                    socket.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
+
 
     @Override
     protected void onDestroy() {
