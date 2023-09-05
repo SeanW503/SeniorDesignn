@@ -92,13 +92,10 @@ public class settings extends AppCompatActivity {
         BluetoothSocket socket = null;
         try {
             // Create a BluetoothSocket for the specified device
-            socket = device.createRfcommSocketToServiceRecord(UUID.fromString("YOUR_UUID")); // Replace "YOUR_UUID" with the actual UUID
+            socket = device.createRfcommSocketToServiceRecord(UUID.fromString("YOUR_UUID"));
 
             // Connect to the device
             socket.connect();
-
-            // Connection was successful
-            Toast.makeText(this, "Successfully connected to device", Toast.LENGTH_SHORT).show();
 
             // Now you can use the socket for data transfer
             // For example, you can get input and output streams from the socket:
@@ -107,9 +104,6 @@ public class settings extends AppCompatActivity {
 
             // Handle data transfer here
         } catch (IOException e) {
-            // Connection was unsuccessful
-            Toast.makeText(this, "Failed to connect to device", Toast.LENGTH_SHORT).show();
-
             // Handle any exceptions that occur during connection
             e.printStackTrace();
         } finally {
