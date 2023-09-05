@@ -11,12 +11,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import android.bluetooth.BluetoothSocket;
+import java.io.IOException;
+import java.util.UUID;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 public class settings extends AppCompatActivity {
 
+    private static final int BLUETOOTH_REQUEST_CODE = 1;
     private BluetoothAdapter bluetoothAdapter;
     private BroadcastReceiver bluetoothReceiver;
 
@@ -77,6 +81,14 @@ public class settings extends AppCompatActivity {
     }
 
     private void connectToDevice(BluetoothDevice device) {
+
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.BLUETOOTH_CONNECT},
+                    BLUETOOTH_REQUEST_CODE);
+            return;
+        }
         BluetoothSocket socket = null;
         try {
             // Create a BluetoothSocket for the specified device
