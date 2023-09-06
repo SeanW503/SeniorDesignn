@@ -42,8 +42,6 @@ public class settings extends AppCompatActivity {
     public BluetoothSocket bluetoothSocket;
     public IntentFilter intentFilter;
     //public BroadcastReceiver bluetoothReceiver;
-    Button connectBtn = findViewById(R.id.connectBtn);
-    Button device = findViewById(R.id.getDev);
 
     public InputStream inputStream;
     public OutputStream outputStream;
@@ -54,6 +52,8 @@ public class settings extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        Button connectBtn = findViewById(R.id.connectBtn);
+        Button device = findViewById(R.id.getDev);
 
         // Initialize BluetoothAdapter
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
