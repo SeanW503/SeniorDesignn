@@ -15,17 +15,16 @@ public class home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-
         Button take_photos = findViewById(R.id.takePhotos);
         ImageButton photo_set = findViewById(R.id.photoSet);
         ImageButton settings = findViewById(R.id.settings);
+
         take_photos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //goes to take photos activity
-                Intent take_photos = new Intent(home.this, takePhotos.class);
-                startActivity(take_photos);
-
+                // Code to start the takePhotos activity
+                Intent intent = new Intent(home.this, takePhotos.class);
+                startActivity(intent);
             }
         });
 
@@ -36,6 +35,7 @@ public class home extends AppCompatActivity {
                 startActivity(photo_set);
             }
         });
+
 
         settings.setOnClickListener(new View.OnClickListener(){
             @Override

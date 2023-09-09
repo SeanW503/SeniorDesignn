@@ -56,6 +56,7 @@
         android:scaleType="centerInside"
         app:layout_constraintBottom_toTopOf="@+id/settings"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/takePhotos"
         app:srcCompat="@drawable/photo" />
