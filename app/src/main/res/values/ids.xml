@@ -2,4 +2,5 @@
 <resources>
     <item name="takePhotoButton" type="id" />
     <item name="capturedImage" type="id" />
+    <item name="savedImage" type="id" />
 </resources>

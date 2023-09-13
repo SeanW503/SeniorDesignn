@@ -16,33 +16,25 @@ public class home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         Button take_photos = findViewById(R.id.takePhotos);
-        ImageButton photo_set = findViewById(R.id.photoSet);
-        ImageButton settings = findViewById(R.id.settings);
+        //ImageButton photo_set = findViewById(R.id.photoSet);
+        //ImageButton settings = findViewById(R.id.settings);
+        Button gallery = findViewById(R.id.gallery);
 
         take_photos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Code to start the takePhotos activity
-                Intent intent = new Intent(home.this, takePhotos.class);
-                startActivity(intent);
-            }
-        });
-
-        photo_set.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Intent photo_set = new Intent(home.this, photoSet.class);
-                startActivity(photo_set);
-            }
-        });
-
-
-        settings.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Intent settings = new Intent(home.this, settings.class);
                 startActivity(settings);
             }
         });
+
+        gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent settings = new Intent(home.this, Gallery.class);
+                startActivity(settings);
+            }
+        });
+
     }
 }

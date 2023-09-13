@@ -22,4 +22,24 @@
         android:text="Send"
         android:onClick="onSendButtonClick" />
 
+    <Button
+        android:id="@+id/finishCaptureButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Finish Capture"
+        android:onClick="finishCapturing" />
+    <!-- ... other layout elements ... -->
+
+    <LinearLayout
+        android:id="@+id/imageContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <!-- this LinearLayout will be empty to start -->
+    </LinearLayout>
+
+    <!-- ... other layout elements ... -->
+
+
+
 </LinearLayout>
