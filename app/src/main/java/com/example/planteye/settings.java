@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -49,6 +50,7 @@ public class settings extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_CODE = 200;
     public static  final String EXTRA_IMAGE_PATH = "com.example.planteye.IMAGE_PATH";
+    private static final int REQUEST_CODE = 1;
     private String currentPhotoPath;
 
     private EditText editText;
@@ -130,25 +132,19 @@ public class settings extends AppCompatActivity {
     // Method to start the camera activity
     private void dispatchTakePictureIntent() {
         if (checkPermission()) {
-            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                if (ContextCompat.checkSelfPermission(settings.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(settings.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+                } else {
+                    // Permission already granted; you can proceed with taking pictures.
 
-                File photoFile = null;
-                try {
-                    photoFile = createImageFile();
-                } catch (IOException e) {
-                    // Handle the IOException
-                    e.printStackTrace();
-                }
 
-                if (photoFile != null) {
-                    Uri photoURI = FileProvider.getUriForFile(this, "com.example.planteye.fileprovider", photoFile);
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                    }
                 }
             }
-        } else {
-            requestPermission();
         }
     }
 
@@ -217,7 +213,7 @@ public class settings extends AppCompatActivity {
                 Toast.makeText(this, "No extras found.", Toast.LENGTH_SHORT).show();
             }
             // Uncomment the following line if you want to keep taking pictures
-            // dispatchTakePictureIntent();
+             dispatchTakePictureIntent();
         }
     }
 
@@ -234,6 +230,13 @@ public class settings extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        File directory = new File(Environment.getExternalStorageDirectory() + File.separator + "YourAppFolder");
+        if (!directory.exists()) {
+            directory.mkdirs(); // Create the directory if it doesn't exist
+        }
+
+        File imageFile = new File(directory, "your_image.jpg");
+
         return imageFile.getAbsolutePath();
     }
 
