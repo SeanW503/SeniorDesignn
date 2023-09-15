@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,7 +20,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -55,6 +53,9 @@ public class settings extends AppCompatActivity {
 
     private EditText editText;
     private Button sendButton;
+    private Button finishCaptureButton;  // <-- Declare the variable here
+    private String sessionID;
+
     private RequestQueue requestQueue;
 
 
@@ -75,12 +76,30 @@ public class settings extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (sessionID == null) {
+                    sessionID = "Session_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+                }
                 String inputValue = editText.getText().toString();
                 int intValue = Integer.parseInt(inputValue);
                 sendHttpRequest("http://192.168.4.1/", intValue);
                 dispatchTakePictureIntent();
             }
         });
+
+        finishCaptureButton = findViewById(R.id.finishCaptureButton);  // Initialize the button
+
+        finishCaptureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // When the button is clicked, move to GalleryActivity
+                Intent intent = new Intent(settings.this, GalleryActivity.class);
+                intent.putStringArrayListExtra("imagePaths", imagePaths);
+                intent.putExtra("SESSION_ID", sessionID);  // Pass the session ID to the next Activity
+                startActivity(intent);
+            }
+        });
+
+
     }
 
     private void sendHttpRequest(String url, final int value) {
@@ -168,7 +187,7 @@ public class settings extends AppCompatActivity {
 
     // Request for permission
     private void requestPermission() {
-        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CODE);
+        ActivityCompat.requestPermissions(settings.this, new String[]{Manifest.permission.CAMERA}, PERMISSION_REQUEST_CODE);
     }
 
     // Handle permission result
@@ -196,7 +215,7 @@ public class settings extends AppCompatActivity {
             if (extras != null) {
                 Bitmap imageBitmap = (Bitmap) extras.get("data");
                 if (imageBitmap != null) {
-                    ImageView imageView = new ImageView(this); // Create a new ImageView for each photo
+                    ImageView imageView = new ImageView(settings.this); // Create a new ImageView for each photo
                     imageView.setImageBitmap(imageBitmap);
                     imageContainer.addView(imageView); // Add to the container
 
@@ -204,13 +223,13 @@ public class settings extends AppCompatActivity {
                     if (imagePath != null) {
                         imagePaths.add(imagePath);
                     } else {
-                        Toast.makeText(this, "Failed to save the image.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(settings.this, "Failed to save the image.", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(this, "No image data found.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(settings.this, "No image data found.", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(this, "No extras found.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(settings.this, "No extras found.", Toast.LENGTH_SHORT).show();
             }
             // Uncomment the following line if you want to keep taking pictures
              dispatchTakePictureIntent();
@@ -220,25 +239,39 @@ public class settings extends AppCompatActivity {
 
 
     private String saveBitmapToFile(Bitmap bitmap) {
+        // Validate sessionID before using it.
+        if (sessionID == null) {
+            // Handle this appropriately. Maybe log an error or show a message to the user.
+            return null;
+        }
+
+        // Create a timestamp and image filename as before.
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String imageFileName = "JPEG_" + timeStamp + ".jpg";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
+        // Use the member variable sessionID to identify the directory.
+        File storageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), sessionID);
+
+        // Create directory if it doesn't exist.
+        if (!storageDir.exists()) {
+            storageDir.mkdirs();
+        }
+
+        // Save the image.
         File imageFile = new File(storageDir, imageFileName);
         try (FileOutputStream out = new FileOutputStream(imageFile)) {
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
-        File directory = new File(Environment.getExternalStorageDirectory() + File.separator + "YourAppFolder");
-        if (!directory.exists()) {
-            directory.mkdirs(); // Create the directory if it doesn't exist
-        }
-
-        File imageFile = new File(directory, "your_image.jpg");
 
         return imageFile.getAbsolutePath();
     }
+
+
+
+
 
 
 

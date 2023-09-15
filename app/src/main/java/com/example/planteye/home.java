@@ -28,10 +28,12 @@ public class home extends AppCompatActivity {
             }
         });
 
+
+
         gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent settings = new Intent(home.this, Gallery.class);
+                Intent settings = new Intent(home.this, GalleryActivity.class);
                 startActivity(settings);
             }
         });

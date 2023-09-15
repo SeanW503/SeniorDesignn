@@ -44,4 +44,5 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="captured_image" />
+    <string name="title_activity_image_list">ImageListActivity</string>
 </resources>
