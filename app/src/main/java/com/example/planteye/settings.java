@@ -16,6 +16,35 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+//Chatgpt imports for camera2 api
+import android.graphics.ImageFormat;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCaptureSession;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraDevice;
+import android.hardware.camera2.CameraManager;
+import android.hardware.camera2.CaptureRequest;
+import android.hardware.camera2.TotalCaptureResult;
+import android.media.Image;
+import android.media.ImageReader;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.util.Size;
+import android.view.Surface;
+import android.view.TextureView;
+import android.widget.ImageView;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+//end of imports for camera2 api
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -40,6 +69,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+
+import java.util.List;
 
 
 public class settings extends AppCompatActivity {
@@ -82,7 +113,7 @@ public class settings extends AppCompatActivity {
                 String inputValue = editText.getText().toString();
                 int intValue = Integer.parseInt(inputValue);
                 sendHttpRequest("http://192.168.4.1/", intValue);
-                dispatchTakePictureIntent();
+                //dispatchTakePictureIntent();
             }
         });
 
@@ -147,7 +178,12 @@ public class settings extends AppCompatActivity {
 
 
 
+//After this point is the camera/picture taking code as of 9/18/2023 we are trying to implement Camera2 api to replace the old depreciated camera api
 
+
+
+
+/*
     // Method to start the camera activity
     private void dispatchTakePictureIntent() {
         if (checkPermission()) {
@@ -268,6 +304,7 @@ public class settings extends AppCompatActivity {
 
         return imageFile.getAbsolutePath();
     }
+*/
 
 
 
