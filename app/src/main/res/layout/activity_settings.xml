@@ -38,6 +38,14 @@
         <!-- this LinearLayout will be empty to start -->
     </LinearLayout>
 
+    <TextureView
+        android:id="@+id/textureView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/otherViews">
+
+    </TextureView> <!-- Adjust this to position your TextureView appropriately -->
+
     <!-- ... other layout elements ... -->
 
 

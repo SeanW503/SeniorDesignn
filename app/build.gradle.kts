@@ -38,9 +38,9 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.navigation:navigation-fragment:2.5.3")
     implementation("androidx.navigation:navigation-ui:2.5.3")
-    implementation ("com.android.volley:volley:1.2.1")
+    implementation("com.android.volley:volley:1.2.1")
     implementation("androidx.core:core-ktx:1.7.0")
-    implementation ("com.google.code.gson:gson:2.8.8")
+    implementation("com.google.code.gson:gson:2.8.8")
     implementation("androidx.recyclerview:recyclerview:1.3.1")
 
 
