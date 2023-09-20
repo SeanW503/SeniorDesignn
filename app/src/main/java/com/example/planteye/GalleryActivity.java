@@ -1,50 +1,33 @@
 package com.example.planteye;
 
-import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Environment;
-import android.view.View;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.planteye.ImageAdapter;
-
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class GalleryActivity extends AppCompatActivity {
-
-    private RecyclerView recyclerView;
+    private ArrayList<byte[]> capturedImages = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
 
-        recyclerView = findViewById(R.id.recycler_view);
+        // Receive the captured image data as a Serializable ArrayList
+        capturedImages = (ArrayList<byte[]>) getIntent().getSerializableExtra("capturedImages");
+
+        // Assuming you have a RecyclerView with the ID "recyclerView" in activity_gallery.xml
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        File rootFolder = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File[] sessionFolders = rootFolder.listFiles();
-
-        ImageAdapter imageAdapter = new ImageAdapter(sessionFolders);
+        // Create an ImageAdapter and set it to the RecyclerView
+        ImageAdapter imageAdapter = new ImageAdapter(capturedImages);
         recyclerView.setAdapter(imageAdapter);
-
-        imageAdapter.setOnItemClickListener(new ImageAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(File folder) {
-                Intent intent = new Intent(GalleryActivity.this, ImageListActivity.class);
-                intent.putExtra("folderPath", folder.getAbsolutePath());
-                startActivity(intent);
-            }
-        });
     }
 }
-
-
