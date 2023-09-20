@@ -46,10 +46,11 @@
         <!-- this LinearLayout will be empty to start -->
     </LinearLayout>
 
-    <TextureView
-        android:id="@+id/textureView"
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
+
 
 <!-- Adjust this to position your TextureView appropriately -->
     <TextureView

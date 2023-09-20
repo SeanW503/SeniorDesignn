@@ -29,6 +29,15 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    dependencies {
+        // ...
+        implementation ("androidx.camera:camera-camera2:1.0.0-rc01")
+        implementation ("androidx.camera:camera-lifecycle:1.0.0-rc01")
+        implementation ("androidx.camera:camera-view:1.0.0-alpha26")
+
+    }
+
+
 }
 
 dependencies {
@@ -41,6 +50,7 @@ dependencies {
     implementation("com.android.volley:volley:1.2.1")
     implementation("androidx.core:core-ktx:1.7.0")
     implementation("com.google.code.gson:gson:2.8.8")
+    implementation ("androidx.camera:camera-camera2:1.0.0-rc01")
     implementation("androidx.recyclerview:recyclerview:1.3.1")
 
 
