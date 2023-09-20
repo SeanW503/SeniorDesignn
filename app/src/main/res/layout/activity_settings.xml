@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -11,29 +12,29 @@
     <EditText
         android:id="@+id/editText"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter Text"
-        android:layout_marginBottom="16dp" />
+        android:layout_height="57dp"
+        android:layout_marginBottom="16dp"
+        android:hint="Enter Text" />
 
     <Button
         android:id="@+id/sendButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Send"
-        android:onClick="onSendButtonClick" />
+        android:onClick="onSendButtonClick"
+        android:text="Send" />
 
     <Button
         android:id="@+id/finishCaptureButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Finish Capture"/>
+        android:text="Finish Capture" />
 
     <Button
         android:id="@+id/captureButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Capture"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:text="Capture" />
 
 
     <!-- ... other layout elements ... -->
@@ -46,21 +47,25 @@
         <!-- this LinearLayout will be empty to start -->
     </LinearLayout>
 
+
+    <!-- Adjust this to position your TextureView appropriately -->
+
     <androidx.camera.view.PreviewView
         android:id="@+id/previewView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_width="378dp"
+        android:layout_height="293dp" />
 
 
-<!-- Adjust this to position your TextureView appropriately -->
-    <TextureView
-        android:id="@+id/cameraTextureView"
+    <ImageView
+        android:id="@+id/capturedImageView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:layout_height="184dp"
+        android:layout_below="@+id/previewView"
+        android:layout_marginTop="16dp"
+        android:scaleType="fitCenter" />
+
 
     <!-- ... other layout elements ... -->
-
 
 
 </LinearLayout>
