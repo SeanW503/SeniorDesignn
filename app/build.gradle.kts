@@ -34,6 +34,13 @@ android {
         implementation ("androidx.camera:camera-camera2:1.0.0-rc01")
         implementation ("androidx.camera:camera-lifecycle:1.0.0-rc01")
         implementation ("androidx.camera:camera-view:1.0.0-alpha26")
+        implementation ("androidx.camera:camera-core:1.x.x")
+        implementation ("androidx.camera:camera-camera2:1.x.x")
+        implementation ("androidx.camera:camera-lifecycle:1.x.x")
+        implementation ("androidx.camera:camera-view:1.x.x")
+        implementation ("com.microsoft.graph:microsoft-graph:3.x.x")  // replace x.x with the latest version
+        implementation ("com.microsoft.identity.client:msal:2.x.x")  // replace x.x with the latest version
+
 
     }
 
@@ -52,7 +59,8 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.8")
     implementation ("androidx.camera:camera-camera2:1.0.0-rc01")
     implementation("androidx.recyclerview:recyclerview:1.3.1")
-
+    implementation ("com.microsoft.graph:microsoft-graph:3.x.x")
+    implementation ("com.microsoft.identity.client:msal:2.x.x")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
