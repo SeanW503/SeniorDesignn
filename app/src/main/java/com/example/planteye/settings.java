@@ -157,7 +157,7 @@ public class settings extends AppCompatActivity {
         // Use the Graph API to upload the imageBytes to the specified folder using the provided access token
 
     }
-
+//nig
 
     private void startCamera() {
         cameraProviderFuture = ProcessCameraProvider.getInstance(this);
