@@ -5,6 +5,7 @@
     android:id="@+id/coordinatorLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ECE4E4"
     tools:context=".home">
 
     <Button
@@ -14,7 +15,8 @@
         android:layout_marginStart="3dp"
         android:layout_marginTop="124dp"
         android:layout_marginEnd="3dp"
-        android:backgroundTint="#000000"
+        android:background="#FBF9F9"
+        android:backgroundTint="#384D63"
         android:fontFamily="serif-monospace"
         android:text="Take Photos"
         android:textColorHighlight="#000000"
@@ -29,6 +31,7 @@
         android:id="@+id/gallery"
         android:layout_width="344dp"
         android:layout_height="173dp"
+        android:background="#1559D1"
         android:text="Gallery"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

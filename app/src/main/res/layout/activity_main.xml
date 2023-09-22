@@ -50,6 +50,8 @@
         android:layout_below="@id/imageView"
         android:layout_marginTop="16dp"
         android:hint="Username"
+        android:textColorHint="#A9A9A9"
+        android:textColor="@color/black"
         android:inputType="text"
         android:minHeight="48dp"
         tools:ignore="VisualLintTextFieldSize" />
@@ -61,6 +63,8 @@
         android:layout_below="@id/usernameEditText"
         android:layout_marginTop="8dp"
         android:hint="Password"
+        android:textColorHint="#A9A9A9"
+        android:textColor="@color/black"
         android:inputType="textPassword"
         android:minHeight="48dp"
         tools:ignore="VisualLintTextFieldSize" />
