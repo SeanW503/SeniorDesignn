@@ -5,26 +5,24 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
-
+        maven {
+            url 'https://pkgs.dev.azure.com/MicrosoftDeviceSDK/DuoSDK-Public/_packaging/Duo-SDK-Feed/maven/v1'
+        }
     }
 }
 
 buildscript {
     repositories {
-        // maven {
-        //     url 'https://example.com/maven-repo'
-        // }
+        // You can uncomment and add any repositories needed for the buildscript here
     }
     // ...
 }
 
-
 rootProject.name = "PlantEye"
 include(":app")
-
-
