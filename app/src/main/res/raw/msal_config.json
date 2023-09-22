@@ -1,0 +1,14 @@
+{
+  "client_id" : "119ed875-6551-4046-97e9-0392f9f09da0",
+  "redirect_uri" : "msal119ed875-6551-4046-97e9-0392f9f09da0://auth",
+  "authorities": [
+    {
+      "type": "AAD",
+      "authority_url": "msal119ed875-6551-4046-97e9-0392f9f09da0://auth\n",
+      "audience": {
+        "type": "AzureADMyOrg",
+        "tenant_id": "1d129a92-8d75-4c5f-8cc9-a76ac42b195b"
+      }
+    }
+  ]
+}

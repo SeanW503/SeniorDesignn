@@ -59,10 +59,12 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.8")
     implementation ("androidx.camera:camera-camera2:1.0.0-rc01")
     implementation("androidx.recyclerview:recyclerview:1.3.1")
-    implementation ("com.microsoft.graph:microsoft-graph:3.x.x")
-    implementation ("com.microsoft.identity.client:msal:2.x.x")
-
+    implementation ("com.microsoft.graph:microsoft-graph:4.7.0")
+    implementation ("com.microsoft.identity.client:msal:4.7.0")
+    implementation ("com.microsoft.identity.client:msal:2.+")
+    implementation("com.microsoft.identity.client:msal:2.2.3")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }
+
