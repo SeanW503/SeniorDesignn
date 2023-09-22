@@ -38,11 +38,18 @@ android {
         implementation ("androidx.camera:camera-camera2:1.x.x")
         implementation ("androidx.camera:camera-lifecycle:1.x.x")
         implementation ("androidx.camera:camera-view:1.x.x")
-        implementation ("com.microsoft.graph:microsoft-graph:3.x.x")  // replace x.x with the latest version
-        implementation ("com.microsoft.identity.client:msal:2.x.x")  // replace x.x with the latest version
+        implementation("com.microsoft.device.display:display-mask:0.3.0")
+        implementation ("com.microsoft.graph:microsoft-graph:5.71.x")  // replace x.x with the latest version
+        implementation ("com.microsoft.identity.client:msal:4.7.0")  // replace x.x with the latest version
 
 
     }
+    repositories {
+        // maven {
+        //     url 'https://example.com/maven-repo'
+        // }
+    }
+
 
 
 }
@@ -58,13 +65,15 @@ dependencies {
     implementation("androidx.core:core-ktx:1.7.0")
     implementation("com.google.code.gson:gson:2.8.8")
     implementation ("androidx.camera:camera-camera2:1.0.0-rc01")
+    implementation("com.microsoft.device.display:display-mask:0.3.0")
     implementation("androidx.recyclerview:recyclerview:1.3.1")
-    implementation ("com.microsoft.graph:microsoft-graph:4.7.0")
+    implementation ("com.microsoft.graph:microsoft-graph:5.71.0")
     implementation ("com.microsoft.identity.client:msal:4.7.0")
-    implementation ("com.microsoft.identity.client:msal:2.+")
-    implementation("com.microsoft.identity.client:msal:2.2.3")
+    implementation ("com.microsoft.identity.client:msal:4.7.0")
+    implementation("com.microsoft.identity.client:msal:4.7.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }
+
 

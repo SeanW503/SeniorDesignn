@@ -10,9 +10,21 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+
     }
 }
 
+buildscript {
+    repositories {
+        // maven {
+        //     url 'https://example.com/maven-repo'
+        // }
+    }
+    // ...
+}
+
+
 rootProject.name = "PlantEye"
 include(":app")
- 
+
+
