@@ -52,13 +52,17 @@ public class settings extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        // 1. Initialize MSAL
         new InitializeMsalAppTask().execute();
 
-
-
+        // 2. Set up the UI elements
         previewView = findViewById(R.id.previewView);
         finishCaptureButton = findViewById(R.id.finishCaptureButton);
+        captureButton = findViewById(R.id.captureButton);
+        finishCaptureButton.setEnabled(false);
 
+        // 3. Set the click listeners for the buttons
         finishCaptureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,7 +70,6 @@ public class settings extends AppCompatActivity {
             }
         });
 
-        captureButton = findViewById(R.id.captureButton);
         captureButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,13 +77,7 @@ public class settings extends AppCompatActivity {
             }
         });
 
-        // Check permissions and then start the camera
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
-        } else {
-            startCamera(); // Initialize the camera if permission is granted.
-        }
-
+        // 4. Initialize the authentication callback
         authenticationCallback = new AuthenticationCallback() {
             @Override
             public void onSuccess(IAuthenticationResult authenticationResult) {
@@ -98,11 +95,23 @@ public class settings extends AppCompatActivity {
                 Log.d("MSAL", "User cancelled authentication.");
             }
         };
+
+        // 5. Check permissions and start the camera if necessary
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
+        } else {
+            startCamera(); // Initialize the camera if permission is granted.
+        }
     }
 
     private void signIn() {
+        if (msalApp == null) {
+            Log.e("MSAL", "msalApp is not initialized.");
+            return;
+        }
         msalApp.acquireToken(this, new String[]{"Files.ReadWrite"}, authenticationCallback);
     }
+
 
     private void capturePhoto() {
         if (imageCapture == null) {
@@ -177,14 +186,19 @@ public class settings extends AppCompatActivity {
 
 
     private class InitializeMsalAppTask extends AsyncTask<Void, Void, PublicClientApplication> {
+
+        private Exception backgroundException = null;
+
+
         @Override
         protected PublicClientApplication doInBackground(Void... voids) {
             try {
-                return (PublicClientApplication) PublicClientApplication.createSingleAccountPublicClientApplication(
+                return (PublicClientApplication) PublicClientApplication.createMultipleAccountPublicClientApplication(
                         getApplicationContext(),
                         R.raw.msal_config
                 );
             } catch (InterruptedException | MsalException e) {
+                backgroundException = e;
                 e.printStackTrace();
                 return null;
             }
@@ -193,11 +207,18 @@ public class settings extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(PublicClientApplication result) {
-            msalApp = result;
-            // You can now safely use msalApp in the main thread
-            // Continue with any other initialization that depends on msalApp here
+            if (result == null && backgroundException != null) {
+                Log.e("MSAL", "Error initializing msalApp", backgroundException);
+                // Inform the user, if necessary
+            } else {
+                msalApp = result;
+                captureButton.setEnabled(true);
+                finishCaptureButton.setEnabled(true);
+            }
         }
+
     }
+
 
 
 
