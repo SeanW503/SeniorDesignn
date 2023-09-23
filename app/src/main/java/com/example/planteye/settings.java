@@ -33,6 +33,7 @@ import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
 public class settings extends AppCompatActivity {
@@ -252,7 +253,16 @@ public class settings extends AppCompatActivity {
                 conn.getOutputStream().write(imageBytes);
 
                 int responseCode = conn.getResponseCode();
-                return responseCode == 200 || responseCode == 201; // 200 OK or 201 Created indicates success
+                if (responseCode == 200 || responseCode == 201) {
+                    Log.d("PlantEye", "Uploaded successfully!");
+                    return true;
+                } else {
+                    // Log the error details
+                    String errorResponse = getErrorResponseBody(conn);
+                    Log.e("PlantEye", "Upload failed with response code: " + responseCode);
+                    Log.e("PlantEye", "Error response: " + errorResponse);
+                    return false;
+                }
             } catch (Exception e) {
                 Log.e("PlantEye", "Upload error", e);
                 return false;
@@ -265,6 +275,20 @@ public class settings extends AppCompatActivity {
                 Log.d("PlantEye", "Uploaded successfully!");
             } else {
                 Log.e("PlantEye", "Failed to upload.");
+            }
+        }
+
+        private String getErrorResponseBody(HttpURLConnection conn) {
+            try {
+                StringBuilder response = new StringBuilder();
+                Scanner scanner = new Scanner(conn.getErrorStream());
+                while (scanner.hasNextLine()) {
+                    response.append(scanner.nextLine());
+                }
+                scanner.close();
+                return response.toString();
+            } catch (Exception e) {
+                return "Error reading error response body";
             }
         }
     }
