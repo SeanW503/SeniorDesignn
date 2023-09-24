@@ -5,40 +5,99 @@
     android:id="@+id/coordinatorLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ECE4E4"
     tools:context=".home">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#66000000" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/texture"
+        android:scaleType="centerCrop"
+        android:alpha=".2" />
+
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.5"
+            android:animateLayoutChanges="true"
+            android:animation="@android:anim/fade_in"
+            android:background="@drawable/rounded_bg"
+            android:clipToOutline="true"
+            android:contentDescription="Background Image"
+            android:scaleType="centerCrop"
+            android:src="@drawable/plantbackground" />
+
+
+    <TextView
+        android:id="@+id/welcomeMessage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/black_border"
+        android:fontFamily="sans-serif-light"
+        android:padding="8dp"
+        android:text="Welcome to PlantEye, make sure you are connected to the project box before continuing!"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:typeface="serif"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/gallery"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/takePhotos"
+        app:layout_constraintTop_toBottomOf="@+id/gallery"
+        app:layout_constraintVertical_bias="0.335" />
+
+
+
 
     <Button
+
         android:id="@+id/takePhotos"
-        android:layout_width="405dp"
-        android:layout_height="146dp"
-        android:layout_marginStart="3dp"
-        android:layout_marginTop="124dp"
-        android:layout_marginEnd="3dp"
-        android:background="#FBF9F9"
-        android:backgroundTint="#384D63"
-        android:fontFamily="serif-monospace"
+        android:layout_width="260dp"
+        android:layout_height="60dp"
+        android:background="@drawable/take_photos_button_bg"
+        android:elevation="20dp"
+        android:fontFamily="serif"
+        android:gravity="center"
+        android:padding="0dp"
+        android:stateListAnimator="@animator/raise_on_press"
         android:text="Take Photos"
-        android:textColorHighlight="#000000"
-        android:textColorLink="#000000"
-        android:textSize="25sp"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/gallery"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.25"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <Button
         android:id="@+id/gallery"
-        android:layout_width="344dp"
-        android:layout_height="173dp"
-        android:background="#1559D1"
+        android:layout_width="260dp"
+
+        android:layout_height="60dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/gallery_button_bg"
+        android:elevation="20dp"
+        android:fontFamily="serif"
+        android:gravity="center"
+        android:padding="0dp"
+        android:stateListAnimator="@animator/raise_on_press"
         android:text="Gallery"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/takePhotos"
-        app:layout_constraintVertical_bias="0.416" />
-
+        app:layout_constraintTop_toBottomOf="@+id/takePhotos" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

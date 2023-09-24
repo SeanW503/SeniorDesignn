@@ -1,9 +1,24 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.PlantEye" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Keep other theme attributes if any -->
+        <item name="materialButtonStyle">@style/CustomMaterialButton</item>
     </style>
 
+    <style name="CustomMaterialButton" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@null</item>
+    </style>
+
+
     <style name="Theme.PlantEye" parent="Base.Theme.PlantEye" />
+
+
+
+
+<!--    <style name="CustomMaterialButton" parent="Widget.Material3.Button">
+        <item name="android:background">@null</item>
+        <item name="materialButtonStyle">@style/CustomMaterialButton</item>
+
+    </style>-->
+
 </resources>

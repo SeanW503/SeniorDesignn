@@ -1,71 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/settings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ECE4E4"
-    android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="3dp"
     tools:context=".MainActivity">
 
+    <!-- Background ImageView -->
+    <ImageView
+        android:id="@+id/backgroundImageView1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/texture"
+        android:scaleType="centerCrop"
+        android:alpha=".04"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Background ImageView 2 -->
+    <ImageView
+        android:id="@+id/backgroundImageView2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/plantbackground"
+        android:scaleType="centerCrop"
+        android:alpha="0.5"
+        android:animateLayoutChanges="true"
+        android:animation="@android:anim/fade_in"
+        android:background="@drawable/rounded_bg"
+        android:clipToOutline="true"
+        android:contentDescription="Background Image"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- EditText for Typing in Degrees -->
     <EditText
         android:id="@+id/editText"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="57dp"
         android:layout_marginBottom="10dp"
         android:hint="Type In Degrees"
         android:textColorHint="#A9A9A9"
-        android:textColor="@color/black"/>
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/plantNameEditText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
+    <!-- EditText for Name of the Plant/PlantID -->
+    <EditText
+        android:id="@+id/plantNameEditText"
+        android:layout_width="0dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="10dp"
+        android:hint="Name of the Plant/PlantID"
+        android:textColorHint="#A9A9A9"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@+id/editText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Send Button -->
     <Button
         android:id="@+id/sendButton"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
+        android:background="@drawable/gallery_button_bg"
         android:onClick="onSendButtonClick"
-        android:text="Send" />
+        android:text="Send"
+        app:layout_constraintTop_toBottomOf="@+id/plantNameEditText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-
+    <!-- Finish Capture Button -->
     <Button
         android:id="@+id/finishCaptureButton"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Finish Capture" />
+        android:layout_marginTop="10dp"
+        android:background="@drawable/gallery_button_bg"
+        android:text="Finish Capture"
+        app:layout_constraintTop_toBottomOf="@+id/sendButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-
-    <!-- ... other layout elements ... -->
-
-
-    <!-- Adjust this to position your TextureView appropriately -->
-
+    <!-- Capture Button -->
     <Button
         android:id="@+id/captureButton"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
-        android:text="Capture" />
+        android:background="@drawable/gallery_button_bg"
+        android:text="Capture"
+        app:layout_constraintTop_toBottomOf="@+id/finishCaptureButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/previewView" />
 
     <androidx.camera.view.PreviewView
         android:id="@+id/previewView"
         android:layout_width="378dp"
         android:layout_height="482dp"
-        android:layout_marginTop="20dp">
-
-        <LinearLayout
-            android:id="@+id/imageContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <!-- this LinearLayout will be empty to start -->
-        </LinearLayout>
-    </androidx.camera.view.PreviewView>
-
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/captureButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- ... other layout elements ... -->
 
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

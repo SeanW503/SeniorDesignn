@@ -8,6 +8,13 @@
     android:background="#FFFFFF"
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        />
 
     <TextView
         android:id="@+id/textView"
@@ -32,16 +39,6 @@
         android:layout_marginTop="3dp"
         android:background="#FFFFFF"
         android:src="@drawable/plant" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
 
     <EditText
         android:id="@+id/usernameEditText"
