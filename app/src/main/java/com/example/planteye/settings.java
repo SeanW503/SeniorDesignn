@@ -25,14 +25,33 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.microsoft.identity.client.AuthenticationCallback;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.PublicClientApplication;
-import com.microsoft.identity.client.exception.MsalClientException;
 import com.microsoft.identity.client.exception.MsalException;
-
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.SurfaceTexture;
+import android.hardware.camera2.CameraMetadata;
+import android.hardware.camera2.params.StreamConfigurationMap;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.util.SparseIntArray;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.io.IOException;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
@@ -45,8 +64,10 @@ public class settings extends AppCompatActivity {
 
     private Button captureButton;
     private Button finishCaptureButton;
+    private Button sendButton;
     private List<byte[]> capturedImages = new ArrayList<>();
     private ImageCapture imageCapture;
+    private EditText editText;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
 
     @Override
@@ -61,7 +82,9 @@ public class settings extends AppCompatActivity {
         previewView = findViewById(R.id.previewView);
         finishCaptureButton = findViewById(R.id.finishCaptureButton);
         captureButton = findViewById(R.id.captureButton);
+        sendButton = findViewById(R.id.sendButton);
         finishCaptureButton.setEnabled(false);
+        editText.findViewById(R.id.editText);
 
         // 3. Set the click listeners for the buttons
         finishCaptureButton.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +100,25 @@ public class settings extends AppCompatActivity {
                 capturePhoto();
             }
         });
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("SendButton", "Button clicked.");  // Add this log
+
+              /*  if (sessionID == null) {
+                    sessionID = "Session_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+                }*/
+
+                String inputValue = editText.getText().toString();
+                int intValue = Integer.parseInt(inputValue);
+
+                Log.d("SendButton", "Sending HTTP Request.");  // Add this log
+
+                sendHttpRequest("http://192.168.4.1/", intValue);
+            }
+        });
+
 
         // 4. Initialize the authentication callback
         authenticationCallback = new AuthenticationCallback() {
