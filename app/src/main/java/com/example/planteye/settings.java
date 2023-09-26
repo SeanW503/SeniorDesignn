@@ -21,39 +21,32 @@ import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.microsoft.identity.client.AuthenticationCallback;
 import com.microsoft.identity.client.IAuthenticationResult;
 import com.microsoft.identity.client.PublicClientApplication;
 import com.microsoft.identity.client.exception.MsalException;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.SurfaceTexture;
-import android.hardware.camera2.CameraMetadata;
-import android.hardware.camera2.params.StreamConfigurationMap;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.util.Log;
-import android.util.SparseIntArray;
-import android.view.View;
-import android.widget.Button;
+
 import android.widget.EditText;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.ByteBuffer;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.io.IOException;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
@@ -69,8 +62,13 @@ public class settings extends AppCompatActivity {
     private Button sendButton;
     private List<byte[]> capturedImages = new ArrayList<>();
     private ImageCapture imageCapture;
-    private EditText editText;
+    private EditText editText_two;
     private ListenableFuture<ProcessCameraProvider> cameraProviderFuture;
+
+    private RequestQueue requestQueue;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +84,9 @@ public class settings extends AppCompatActivity {
         captureButton = findViewById(R.id.captureButton);
         sendButton = findViewById(R.id.sendButton);
         finishCaptureButton.setEnabled(false);
-        //editText.findViewById(R.id.editText);
+        editText_two = findViewById(R.id.editText);
+
+        requestQueue = Volley.newRequestQueue(this);
 
         // 3. Set the click listeners for the buttons
         finishCaptureButton.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +112,7 @@ public class settings extends AppCompatActivity {
                     sessionID = "Session_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
                 }*/
 
-                String inputValue = editText.getText().toString();
+                String inputValue = editText_two.getText().toString();
                 int intValue = Integer.parseInt(inputValue);
 
                 Log.d("SendButton", "Sending HTTP Request.");  // Add this log
@@ -149,44 +149,46 @@ public class settings extends AppCompatActivity {
         }
     }
 
-    private void sendHttpRequest(String urlStr, int intValue) {
+    private void sendHttpRequest(String url, final int value) {
         try {
-            URL url = new URL(urlStr);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            JSONObject jsonParams = new JSONObject();
+            jsonParams.put("value", value);
 
-            // Set the HTTP method (GET, POST, etc.)
-            connection.setRequestMethod("POST");
+            final String requestBody = jsonParams.toString();
 
-            // Set any request headers if needed
-            // connection.setRequestProperty("HeaderName", "HeaderValue");
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            // Handle the response here (if needed)
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // Handle any errors that occur during the request
+                            error.printStackTrace();
+                        }
+                    }) {
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
 
-            // Enable input/output streams for sending/receiving data
-            connection.setDoInput(true);
-            connection.setDoOutput(true);
+                @Override
+                public byte[] getBody() throws AuthFailureError {
+                    try {
+                        return requestBody == null ? null : requestBody.getBytes("utf-8");
+                    } catch (UnsupportedEncodingException uee) {
+                        return null;
+                    }
+                }
+            };
 
-            // Create a data payload if needed (e.g., sending JSON data)
-            String payload = "value=" + intValue; // Example payload
-
-            // Write the payload to the request body
-            OutputStream outputStream = connection.getOutputStream();
-            outputStream.write(payload.getBytes("UTF-8"));
-            outputStream.close();
-
-            // Get the response code
-            int responseCode = connection.getResponseCode();
-
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                // Request was successful, handle the response here
-                // You can read the response using connection.getInputStream()
-            } else {
-                // Request failed, handle the error here
-            }
-
-            // Disconnect the connection
-            connection.disconnect();
-        } catch (IOException e) {
+            // Add the request to the request queue
+            requestQueue.add(stringRequest);
+        } catch (JSONException e) {
             e.printStackTrace();
-            // Handle any exceptions that occurred during the request
         }
     }
 
