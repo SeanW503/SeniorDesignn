@@ -21,6 +21,8 @@ import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.microsoft.identity.client.AuthenticationCallback;
 import com.microsoft.identity.client.IAuthenticationResult;
@@ -84,7 +86,7 @@ public class settings extends AppCompatActivity {
         captureButton = findViewById(R.id.captureButton);
         sendButton = findViewById(R.id.sendButton);
         finishCaptureButton.setEnabled(false);
-        editText.findViewById(R.id.editText);
+        //editText.findViewById(R.id.editText);
 
         // 3. Set the click listeners for the buttons
         finishCaptureButton.setOnClickListener(new View.OnClickListener() {
@@ -146,6 +148,48 @@ public class settings extends AppCompatActivity {
             startCamera(); // Initialize the camera if permission is granted.
         }
     }
+
+    private void sendHttpRequest(String urlStr, int intValue) {
+        try {
+            URL url = new URL(urlStr);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            // Set the HTTP method (GET, POST, etc.)
+            connection.setRequestMethod("POST");
+
+            // Set any request headers if needed
+            // connection.setRequestProperty("HeaderName", "HeaderValue");
+
+            // Enable input/output streams for sending/receiving data
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+
+            // Create a data payload if needed (e.g., sending JSON data)
+            String payload = "value=" + intValue; // Example payload
+
+            // Write the payload to the request body
+            OutputStream outputStream = connection.getOutputStream();
+            outputStream.write(payload.getBytes("UTF-8"));
+            outputStream.close();
+
+            // Get the response code
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                // Request was successful, handle the response here
+                // You can read the response using connection.getInputStream()
+            } else {
+                // Request failed, handle the error here
+            }
+
+            // Disconnect the connection
+            connection.disconnect();
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Handle any exceptions that occurred during the request
+        }
+    }
+
 
     private void signIn() {
         if (msalApp == null) {
