@@ -41,19 +41,20 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- EditText for Typing in Degrees -->
+
+    <!-- EditText for Name of the Plant/PlantID -->
     <EditText
         android:id="@+id/editText"
         android:layout_width="0dp"
         android:layout_height="57dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="8dp"
         android:hint="Type In Degrees"
-        android:textColorHint="#A9A9A9"
         android:textColor="@color/black"
+        android:textColorHint="#A9A9A9"
         app:layout_constraintBottom_toTopOf="@+id/plantNameEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- EditText for Name of the Plant/PlantID -->
     <EditText
         android:id="@+id/plantNameEditText"
         android:layout_width="0dp"

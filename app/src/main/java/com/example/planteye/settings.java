@@ -35,6 +35,7 @@ import com.microsoft.identity.client.PublicClientApplication;
 import com.microsoft.identity.client.exception.MsalException;
 
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -106,18 +107,32 @@ public class settings extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("SendButton", "Button clicked.");  // Add this log
+                String inputValue = editText_two.getText().toString(); // Get the value from editText
+                int totalDegrees;
+                try {
+                    totalDegrees = Integer.parseInt(inputValue);
+                } catch (NumberFormatException e) {
+                    Toast.makeText(settings.this, "Invalid degree input", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-              /*  if (sessionID == null) {
-                    sessionID = "Session_" + new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-                }*/
+                // Calculate the number of photos based on 360/totalDegrees
+                int numberOfPhotos = 360 / totalDegrees;
 
-                String inputValue = editText_two.getText().toString();
-                int intValue = Integer.parseInt(inputValue);
+                for (int i = 0; i < numberOfPhotos; i++) {
+                    // Send HTTP request to rotate by the totalDegrees value
+                    sendHttpRequest("http://192.168.4.1/", totalDegrees);
 
-                Log.d("SendButton", "Sending HTTP Request.");  // Add this log
+                    // Introduce a delay to wait for rotation and stabilization
+                    try {
+                        Thread.sleep(1000); // Adjust this delay based on your microcontroller's speed
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
-                sendHttpRequest("http://192.168.4.1/", intValue);
+                    // Capture the photo
+                    capturePhoto();
+                }
             }
         });
 
