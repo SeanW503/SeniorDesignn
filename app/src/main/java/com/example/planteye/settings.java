@@ -4,6 +4,8 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -50,6 +52,8 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class settings extends AppCompatActivity {
     private static final int CAMERA_REQUEST_CODE = 200;
@@ -69,6 +73,12 @@ public class settings extends AppCompatActivity {
     private RequestQueue requestQueue;
 
 
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
+    private Handler handler = new Handler(Looper.getMainLooper());
+
+
+
+
 
 
     @Override
@@ -77,7 +87,7 @@ public class settings extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         // 1. Initialize MSAL
-        new InitializeMsalAppTask().execute();
+        initializeMsalApp();
 
         // 2. Set up the UI elements
         previewView = findViewById(R.id.previewView);
@@ -289,112 +299,122 @@ public class settings extends AppCompatActivity {
 
 
 
-    private class InitializeMsalAppTask extends AsyncTask<Void, Void, PublicClientApplication> {
-
-        private Exception backgroundException = null;
-
-
-        @Override
-        protected PublicClientApplication doInBackground(Void... voids) {
+    private void initializeMsalApp() {
+        executorService.execute(() -> {
             try {
-                return (PublicClientApplication) PublicClientApplication.createMultipleAccountPublicClientApplication(
+                final PublicClientApplication result = (PublicClientApplication) PublicClientApplication.createMultipleAccountPublicClientApplication(
                         getApplicationContext(),
                         R.raw.msal_config
                 );
+                handler.post(() -> {
+                    msalApp = result;
+                    captureButton.setEnabled(true);
+                    finishCaptureButton.setEnabled(true);
+                });
             } catch (InterruptedException | MsalException e) {
-                backgroundException = e;
-                e.printStackTrace();
-                return null;
+                handler.post(() -> {
+                    Log.e("MSAL", "Error initializing msalApp", e);
+                    // Inform the user, if necessary
+                });
             }
-        }
-
-
-        @Override
-        protected void onPostExecute(PublicClientApplication result) {
-            if (result == null && backgroundException != null) {
-                Log.e("MSAL", "Error initializing msalApp", backgroundException);
-                // Inform the user, if necessary
-            } else {
-                msalApp = result;
-                captureButton.setEnabled(true);
-                finishCaptureButton.setEnabled(true);
-            }
-        }
-
+        });
     }
 
 
+
+
+    private void uploadToOneDrive(String accessToken, byte[] imageBytes) {
+        executorService.execute(() -> {
+            boolean result = performUpload(accessToken, imageBytes);
+            handler.post(() -> {
+                if (result) {
+                    logDebug("Uploaded successfully!");
+                    Toast.makeText(settings.this, "Uploaded Successfully!", Toast.LENGTH_LONG).show();
+                } else {
+                    logError("Failed to upload.");
+                    Toast.makeText(settings.this, "Upload Failed!", Toast.LENGTH_LONG).show();
+                }
+            });
+        });
+    }
+
+    private boolean performUpload(String accessToken, byte[] imageBytes) {
+        try {
+            final String UPLOAD_URL = "https://graph.microsoft.com/v1.0/me/drive/root:/PlantEye/";
+            URL url = new URL(UPLOAD_URL + System.currentTimeMillis() + ".jpg:/content");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("PUT");
+            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+            conn.setRequestProperty("Content-Type", "image/jpeg");
+            conn.setDoOutput(true);
+
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(imageBytes);
+            }
+
+            int responseCode = conn.getResponseCode();
+            if (responseCode == 200 || responseCode == 201) {
+                logDebug("Uploaded successfully to: " + url.toString());
+                return true;
+            } else {
+                String errorResponse = getErrorResponseBody(conn);
+                logError("Upload failed with response code: " + responseCode);
+                logError("Error response: " + errorResponse);
+                return false;
+            }
+        } catch (Exception e) {
+            logError("Upload error", e);
+            return false;
+        }
+    }
+
+    private String getErrorResponseBody(HttpURLConnection conn) {
+        try (Scanner scanner = new Scanner(conn.getErrorStream())) {
+            StringBuilder response = new StringBuilder();
+            while (scanner.hasNextLine()) {
+                response.append(scanner.nextLine());
+            }
+            return response.toString();
+        } catch (Exception e) {
+            return "Error reading error response body";
+        }
+    }
+
+    private void logDebug(String message) {
+        Log.d("PlantEye", message);
+    }
+
+    private void logError(String message) {
+        Log.e("PlantEye", message);
+    }
+
+    private void logError(String message, Throwable tr) {
+        Log.e("PlantEye", message, tr);
+    }
 
 
 
 
     private void uploadToOneDrive(String accessToken) {
         for (byte[] imageBytes : capturedImages) {
-            new UploadToOneDriveTask(accessToken, imageBytes).execute();
+            uploadToOneDriveTask(accessToken, imageBytes);
+
         }
     }
 
-    private class UploadToOneDriveTask extends AsyncTask<Void, Void, Boolean> {
-        private String accessToken;
-        private byte[] imageBytes;
-        private static final String UPLOAD_URL = "https://graph.microsoft.com/v1.0/me/drive/root:/PlantEyeFolder/"; // Modify folder path as needed
+    private void uploadToOneDriveTask(String accessToken, byte[] imageBytes) {
+        uploadToOneDrive(accessToken, imageBytes);
 
-        public UploadToOneDriveTask(String accessToken, byte[] imageBytes) {
-            this.accessToken = accessToken;
-            this.imageBytes = imageBytes;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... voids) {
-            try {
-                URL url = new URL(UPLOAD_URL + System.currentTimeMillis() + ".jpg:/content"); // Using current time for unique filenames
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("PUT");
-                conn.setRequestProperty("Authorization", "Bearer " + accessToken);
-                conn.setRequestProperty("Content-Type", "image/jpeg");
-                conn.setDoOutput(true);
-                conn.getOutputStream().write(imageBytes);
-
-                int responseCode = conn.getResponseCode();
-                if (responseCode == 200 || responseCode == 201) {
-                    Log.d("PlantEye", "Uploaded successfully!");
-                    return true;
-                } else {
-                    // Log the error details
-                    String errorResponse = getErrorResponseBody(conn);
-                    Log.e("PlantEye", "Upload failed with response code: " + responseCode);
-                    Log.e("PlantEye", "Error response: " + errorResponse);
-                    return false;
-                }
-            } catch (Exception e) {
-                Log.e("PlantEye", "Upload error", e);
-                return false;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(Boolean success) {
-            if (success) {
-                Log.d("PlantEye", "Uploaded successfully!");
-            } else {
-                Log.e("PlantEye", "Failed to upload.");
-            }
-        }
-
-        private String getErrorResponseBody(HttpURLConnection conn) {
-            try {
-                StringBuilder response = new StringBuilder();
-                Scanner scanner = new Scanner(conn.getErrorStream());
-                while (scanner.hasNextLine()) {
-                    response.append(scanner.nextLine());
-                }
-                scanner.close();
-                return response.toString();
-            } catch (Exception e) {
-                return "Error reading error response body";
-            }
-        }
     }
+
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        executorService.shutdown();
+    }
+
 
 
 }
