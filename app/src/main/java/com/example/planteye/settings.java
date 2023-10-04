@@ -76,6 +76,8 @@ public class settings extends AppCompatActivity {
     private ExecutorService executorService = Executors.newSingleThreadExecutor();
     private Handler handler = new Handler(Looper.getMainLooper());
 
+    private EditText editTextPlantName;
+
 
 
 
@@ -96,6 +98,8 @@ public class settings extends AppCompatActivity {
         sendButton = findViewById(R.id.sendButton);
         finishCaptureButton.setEnabled(false);
         editText_two = findViewById(R.id.editText);
+        editTextPlantName = findViewById(R.id.plantNameEditText);
+
 
         requestQueue = Volley.newRequestQueue(this);
 
@@ -341,7 +345,22 @@ public class settings extends AppCompatActivity {
     private boolean performUpload(String accessToken, byte[] imageBytes) {
         try {
             final String UPLOAD_URL = "https://graph.microsoft.com/v1.0/me/drive/root:/PlantEye/";
-            URL url = new URL(UPLOAD_URL + System.currentTimeMillis() + ".jpg:/content");
+
+            // Retrieve the plant name and degree value from the EditText fields
+            String plantNameValue = editTextPlantName.getText().toString().trim();
+            String degreeValue = editText_two.getText().toString().trim();
+
+            // Check if the values are empty
+            if (plantNameValue.isEmpty() || degreeValue.isEmpty()) {
+                Toast.makeText(settings.this, "Please provide both Plant Name and Degree", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            // Construct the path for OneDrive
+            String folderPath = plantNameValue + "_PlantID/sv_" + degreeValue + "/";
+            String imagePath = folderPath + System.currentTimeMillis() + ".jpg";
+            URL url = new URL(UPLOAD_URL + imagePath + ":/content");
+
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("PUT");
             conn.setRequestProperty("Authorization", "Bearer " + accessToken);
