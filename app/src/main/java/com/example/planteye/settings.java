@@ -139,7 +139,7 @@ public class settings extends AppCompatActivity {
 
                     // Introduce a delay to wait for rotation and stabilization
                     try {
-                        Thread.sleep(1000); // Adjust this delay based on your microcontroller's speed
+                        Thread.sleep(5000); // Adjust this delay based on your microcontroller's speed
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -357,7 +357,7 @@ public class settings extends AppCompatActivity {
             }
 
             // Construct the path for OneDrive
-            String folderPath = plantNameValue + "_PlantID/sv_" + degreeValue + "/";
+            String folderPath = plantNameValue + "/sv_" + degreeValue + "/";
             String imagePath = folderPath + System.currentTimeMillis() + ".jpg";
             URL url = new URL(UPLOAD_URL + imagePath + ":/content");
 
