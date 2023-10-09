@@ -46,6 +46,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.ByteBuffer;
+import java.time.Month;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -54,6 +55,8 @@ import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class settings extends AppCompatActivity {
     private static final int CAMERA_REQUEST_CODE = 200;
@@ -343,6 +346,20 @@ public class settings extends AppCompatActivity {
     }
 
     private boolean performUpload(String accessToken, byte[] imageBytes) {
+        LocalDate current_date = LocalDate.now();
+        int year = current_date.getYear();
+        int month = current_date.getMonthValue();
+        int day = current_date.getDayOfMonth();
+
+        // file date for image saving path
+        String file_date = day + "/" + month + "/" + year;
+
+        LocalDateTime current_time = LocalDateTime.now();
+        int hours = current_time.getHour();
+        int minutes = current_time.getMinute();
+
+        String file_time = hours + ":" + minutes;
+
         try {
             final String UPLOAD_URL = "https://graph.microsoft.com/v1.0/me/drive/root:/PlantEye/";
 
@@ -358,8 +375,9 @@ public class settings extends AppCompatActivity {
 
             // Construct the path for OneDrive
             String folderPath = plantNameValue + "/sv_" + degreeValue + "/";
-            String imagePath = folderPath + System.currentTimeMillis() + ".jpg";
+            String imagePath = folderPath + file_date + "/" + file_time + ".jpg";
             URL url = new URL(UPLOAD_URL + imagePath + ":/content");
+
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("PUT");
