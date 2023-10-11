@@ -46,7 +46,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.ByteBuffer;
-import java.time.Month;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -55,8 +54,6 @@ import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class settings extends AppCompatActivity {
     private static final int CAMERA_REQUEST_CODE = 200;
@@ -124,34 +121,23 @@ public class settings extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String inputValue = editText_two.getText().toString(); // Get the value from editText
+                sendButton.setEnabled(false);
+
+                String inputValue = editText_two.getText().toString();
                 int totalDegrees;
                 try {
                     totalDegrees = Integer.parseInt(inputValue);
                 } catch (NumberFormatException e) {
                     Toast.makeText(settings.this, "Invalid degree input", Toast.LENGTH_SHORT).show();
+                    sendButton.setEnabled(true);
                     return;
                 }
 
-                // Calculate the number of photos based on 360/totalDegrees
                 int numberOfPhotos = 360 / totalDegrees;
-
-                for (int i = 0; i < numberOfPhotos; i++) {
-                    // Send HTTP request to rotate by the totalDegrees value
-                    sendHttpRequest("http://192.168.4.1/", totalDegrees);
-
-                    // Introduce a delay to wait for rotation and stabilization
-                    try {
-                        Thread.sleep(5000); // Adjust this delay based on your microcontroller's speed
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    // Capture the photo
-                    capturePhoto();
-                }
+                takePhotosInSequence(totalDegrees, numberOfPhotos);
             }
         });
+
 
 
         // 4. Initialize the authentication callback
@@ -178,6 +164,35 @@ public class settings extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, CAMERA_REQUEST_CODE);
         } else {
             startCamera(); // Initialize the camera if permission is granted.
+        }
+    }
+
+
+    private int photoCounter = 0;
+
+    private void takePhotosInSequence(int totalDegrees, int numberOfPhotos) {
+        if (photoCounter < numberOfPhotos) {
+            sendHttpRequest("http://192.168.4.1/", totalDegrees);
+
+            // Delay for 5 seconds
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    capturePhoto();
+
+                    // Delay for another 5 seconds before the next rotation and photo
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            photoCounter++;
+                            takePhotosInSequence(totalDegrees, numberOfPhotos);
+                        }
+                    }, 5000);
+                }
+            }, 5000);
+        } else {
+            photoCounter = 0; // Reset counter
+            sendButton.setEnabled(true);
         }
     }
 
@@ -344,22 +359,9 @@ public class settings extends AppCompatActivity {
             });
         });
     }
+    private int imageCounter = 0;
 
     private boolean performUpload(String accessToken, byte[] imageBytes) {
-        LocalDate current_date = LocalDate.now();
-        int year = current_date.getYear();
-        int month = current_date.getMonthValue();
-        int day = current_date.getDayOfMonth();
-
-        // file date for image saving path
-        String file_date = day + "/" + month + "/" + year;
-
-        LocalDateTime current_time = LocalDateTime.now();
-        int hours = current_time.getHour();
-        int minutes = current_time.getMinute();
-
-        String file_time = hours + ":" + minutes;
-
         try {
             final String UPLOAD_URL = "https://graph.microsoft.com/v1.0/me/drive/root:/PlantEye/";
 
@@ -375,9 +377,8 @@ public class settings extends AppCompatActivity {
 
             // Construct the path for OneDrive
             String folderPath = plantNameValue + "/sv_" + degreeValue + "/";
-            String imagePath = folderPath + file_date + "/" + file_time + ".jpg";
+            String imagePath = folderPath + "image_" + (++imageCounter) + ".jpg";
             URL url = new URL(UPLOAD_URL + imagePath + ":/content");
-
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("PUT");
