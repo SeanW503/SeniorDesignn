@@ -46,9 +46,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
@@ -377,7 +379,7 @@ public class settings extends AppCompatActivity {
 
             // Construct the path for OneDrive
             String folderPath = plantNameValue + "/sv_" + degreeValue + "/";
-            String imagePath = folderPath + "image_" + (++imageCounter) + ".jpg";
+            String imagePath = folderPath + "image_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date(System.currentTimeMillis())) + "_" + (++imageCounter) + ".jpg";
             URL url = new URL(UPLOAD_URL + imagePath + ":/content");
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();

@@ -1,7 +1,22 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
+    <!-- Base application theme -->
     <style name="Base.Theme.PlantEye" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <!-- Keep other theme attributes if any -->
+        <item name="materialButtonStyle">@style/CustomMaterialButton</item>
     </style>
+
+    <!-- Theme extending the base theme -->
+    <style name="Theme.PlantEye" parent="Base.Theme.PlantEye">
+        <!-- Transparent system bars for edge-to-edge. -->
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+    </style>
+
+    <!-- Custom MaterialButton style -->
+    <style name="CustomMaterialButton" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@null</item>
+    </style>
+
 </resources>

@@ -77,9 +77,11 @@
         android:background="@drawable/gallery_button_bg"
         android:onClick="onSendButtonClick"
         android:text="Start Imaging"
+        android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@+id/plantNameEditText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/Theme.PlantEye" />
 
     <!-- Finish Capture Button -->
     <Button
@@ -89,9 +91,11 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/gallery_button_bg"
         android:text="Upload to One Drive"
+        android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@+id/sendButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/Theme.PlantEye" />
 
     <!-- Capture Button -->
     <Button
@@ -102,10 +106,12 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/gallery_button_bg"
         android:text="Take a Photo"
+        android:textColor="#FFFFFF"
         app:layout_constraintTop_toBottomOf="@+id/finishCaptureButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/previewView" />
+        app:layout_constraintBottom_toTopOf="@+id/previewView"
+        style="@style/Theme.PlantEye" />
 
     <androidx.camera.view.PreviewView
         android:id="@+id/previewView"
