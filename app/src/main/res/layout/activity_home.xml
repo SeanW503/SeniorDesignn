@@ -48,10 +48,10 @@
         android:textSize="20sp"
         android:typeface="serif"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/gallery"
+        app:layout_constraintEnd_toEndOf="@+id/takePhotos"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/takePhotos"
-        app:layout_constraintTop_toBottomOf="@+id/gallery"
+        app:layout_constraintTop_toBottomOf="@+id/takePhotos"
         app:layout_constraintVertical_bias="0.335" />
 
 
@@ -71,7 +71,7 @@
         android:text="Take Photos"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/gallery"
+        app:layout_constraintBottom_toTopOf="@+id/welcomeMessage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
@@ -79,25 +79,6 @@
         app:layout_constraintVertical_bias="0.25"
         app:layout_constraintVertical_chainStyle="packed" />
 
-    <Button
-        android:id="@+id/gallery"
-        android:layout_width="260dp"
 
-        android:layout_height="60dp"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/gallery_button_bg"
-        android:elevation="20dp"
-        android:fontFamily="serif"
-        android:gravity="center"
-        android:padding="0dp"
-        android:stateListAnimator="@animator/raise_on_press"
-        android:text="Gallery"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/takePhotos" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

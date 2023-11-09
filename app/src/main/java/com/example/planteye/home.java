@@ -1,11 +1,11 @@
 package com.example.planteye;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 
 public class home extends AppCompatActivity {
@@ -18,7 +18,6 @@ public class home extends AppCompatActivity {
         Button take_photos = findViewById(R.id.takePhotos);
         //ImageButton photo_set = findViewById(R.id.photoSet);
         //ImageButton settings = findViewById(R.id.settings);
-        Button gallery = findViewById(R.id.gallery);
 
         take_photos.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -30,13 +29,7 @@ public class home extends AppCompatActivity {
 
 
 
-        gallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent settings = new Intent(home.this, GalleryActivity.class);
-                startActivity(settings);
-            }
-        });
+
 
     }
 }
