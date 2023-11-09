@@ -65,6 +65,7 @@
         android:layout_below="@id/passwordEditText"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
+        android:textColor="#FFFFFF"
         android:onClick="home"
         android:text="Login" />
 
