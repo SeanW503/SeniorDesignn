@@ -416,7 +416,7 @@ public class settings extends AppCompatActivity {
             }
             return response.toString();
         } catch (Exception e) {
-            return "Error reading error response body";
+            return "Error reading error response body.";
         }
     }
 
