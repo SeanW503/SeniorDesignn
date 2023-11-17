@@ -52,6 +52,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -347,9 +348,9 @@ public class settings extends AppCompatActivity {
 
 
 
-    private void uploadToOneDrive(String accessToken, byte[] imageBytes) {
+    private void uploadToOneDrive(String accessToken, List<byte[]> capturedImages) {
         executorService.execute(() -> {
-            boolean result = performUpload(accessToken, imageBytes);
+            boolean result = performUpload(accessToken, capturedImages);
             handler.post(() -> {
                 if (result) {
                     logDebug("Uploaded successfully!");
@@ -361,9 +362,10 @@ public class settings extends AppCompatActivity {
             });
         });
     }
+
     private int imageCounter = 0;
 
-    private boolean performUpload(String accessToken, byte[] imageBytes) {
+    private boolean performUpload(String accessToken, List<byte[]> capturedImages) {
         try {
             final String UPLOAD_URL = "https://graph.microsoft.com/v1.0/me/drive/root:/PlantEye/";
 
@@ -377,36 +379,66 @@ public class settings extends AppCompatActivity {
                 return false;
             }
 
-            // Construct the path for OneDrive
-            String folderPath = plantNameValue + "/sv_" + degreeValue + "/";
-            String imagePath = folderPath + "image_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date(System.currentTimeMillis())) + "_" + (++imageCounter) + ".jpg";
-            URL url = new URL(UPLOAD_URL + imagePath + ":/content");
+            // Convert degreeValue to an integer
+            int degree = Integer.parseInt(degreeValue);
+            int numberOfPhotos = 360 / degree;
 
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("PUT");
-            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
-            conn.setRequestProperty("Content-Type", "image/jpeg");
-            conn.setDoOutput(true);
-
-            try (OutputStream os = conn.getOutputStream()) {
-                os.write(imageBytes);
-            }
-
-            int responseCode = conn.getResponseCode();
-            if (responseCode == 200 || responseCode == 201) {
-                logDebug("Uploaded successfully to: " + url.toString());
-                return true;
-            } else {
-                String errorResponse = getErrorResponseBody(conn);
-                logError("Upload failed with response code: " + responseCode);
-                logError("Error response: " + errorResponse);
+            // Ensure capturedImages has enough images
+            if (capturedImages.size() != numberOfPhotos) {
+                Toast.makeText(settings.this, "Number of captured images doesn't match the required amount for the degree.", Toast.LENGTH_SHORT).show();
                 return false;
             }
+
+            // Construct the image path for OneDrive for each photo
+            for (int i = 0; i < numberOfPhotos; i++) {
+                // Calculate the current degree based on the loop index
+                int currentDegree = degree * i;
+
+                // Calculate the folder path for the current degree value
+                String folderPath;
+                if (currentDegree == 360) {
+                    folderPath = plantNameValue + "/sv_" + degreeValue + "/";
+                } else {
+                    folderPath = plantNameValue + "/sv_" + currentDegree + "/";
+                }
+
+                // Construct the image path for the current photo
+
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmm", Locale.getDefault()).format(new Date());
+                String imagePath = folderPath + timeStamp + ".jpg";
+
+                URL url = new URL(UPLOAD_URL + imagePath + ":/content");
+
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("PUT");
+                conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+                conn.setRequestProperty("Content-Type", "image/jpeg");
+                conn.setDoOutput(true);
+
+                // Use the byte array of the current image for upload
+                byte[] imageBytes = capturedImages.get(i);
+
+                try (OutputStream os = conn.getOutputStream()) {
+                    os.write(imageBytes);
+                }
+
+                int responseCode = conn.getResponseCode();
+                if (responseCode != 200 && responseCode != 201) {
+                    String errorResponse = getErrorResponseBody(conn);
+                    logError("Upload failed with response code: " + responseCode);
+                    logError("Error response: " + errorResponse);
+                    return false;
+                }
+            }
+
+            logDebug("Uploaded successfully to the respective sv_degree folders.");
+            return true;
         } catch (Exception e) {
             logError("Upload error", e);
             return false;
         }
     }
+
 
     private String getErrorResponseBody(HttpURLConnection conn) {
         try (Scanner scanner = new Scanner(conn.getErrorStream())) {
@@ -437,15 +469,15 @@ public class settings extends AppCompatActivity {
 
     private void uploadToOneDrive(String accessToken) {
         for (byte[] imageBytes : capturedImages) {
-            uploadToOneDriveTask(accessToken, imageBytes);
+            uploadToOneDriveTask(accessToken, capturedImages);
 
         }
     }
 
-    private void uploadToOneDriveTask(String accessToken, byte[] imageBytes) {
-        uploadToOneDrive(accessToken, imageBytes);
-
+    private void uploadToOneDriveTask(String accessToken, List<byte[]> capturedImages) {
+        uploadToOneDrive(accessToken, capturedImages);
     }
+
 
 
 
