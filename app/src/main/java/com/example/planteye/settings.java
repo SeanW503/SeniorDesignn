@@ -402,7 +402,7 @@ public class settings extends AppCompatActivity {
                     folderPath = plantNameValue + "/sv_" + currentDegree + "/";
                 }
 
-                // Construct the image path for the current photo
+                // Construct the image path for the current photo and did some cool things
 
                 String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmm", Locale.getDefault()).format(new Date());
                 String imagePath = folderPath + timeStamp + ".jpg";
